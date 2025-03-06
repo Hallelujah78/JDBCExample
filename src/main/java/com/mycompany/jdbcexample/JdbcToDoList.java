@@ -41,7 +41,11 @@ public class JdbcToDoList {
          */
         // Create a table with sql string
         var createTableSql = "CREATE TABLE IF NOT EXISTS TASK (id IDENTITY PRIMARY KEY, name VARCHAR)";
-        // insert string for task, ID is auto created since it is the primary key
+        /*
+        Insert string for task, ID is auto created since it is the primary key
+        - We generally don't want to hard code queries like this.
+        - We would use a PreparedStatement (interface)
+         */
         String insertQuery = "insert into TASK (name) values ('Learn Java')";
 
         /*
@@ -59,7 +63,41 @@ public class JdbcToDoList {
         // Execute query to insert task
         statement.execute(insertQuery);
 
-        // close statement and connection to remove issues with console not updating
+        /**
+         * *************** PREPARED STATEMENT *******************
+         */
+        // PreparedStatement example - note the ?
+        String insertStatement = "insert into TASK (name) values(?)";
+        // prepareStatement returns a prepared statement!
+        var preparedStatement = connection.prepareStatement(insertStatement);
+
+        // Set the value of the first ? in the insert statement
+        preparedStatement.setString(1, "Learn Spring!");
+
+        // Execute the statement
+        preparedStatement.execute();
+
+        /**
+         * *************** END OF PREPARED STATEMENT *******************
+         */
+        /**
+         * *************** UPDATE *******************
+         */
+        // Update query - update TASK where name is Learn Java
+        String updateCommand = "update TASK set name = ? where name = 'Learn Java'";
+
+        // prep statement
+        var ps = connection.prepareStatement(updateCommand);
+
+        // set the value in the prep statement
+        ps.setString(1, "Learn Jakarta EE!");
+        // execute the prep statement
+        ps.execute();
+
+        /**
+         * *************** END UPDATE *******************
+         */
+// Close statement and connection to remove issues with console not updating
         statement.close();
         connection.close();
         // print statement to show we ran the right file!
