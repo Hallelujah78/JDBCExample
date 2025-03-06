@@ -57,6 +57,16 @@ public class TaskRepository {
          */
         try (Connection connection = getDataSource().getConnection()) {
 
+            String insertStatement = "insert into TASK (name) values(?)";
+            // prepareStatement returns a prepared statement.
+            var preparedStatement = connection.prepareStatement(insertStatement);
+
+            // Set the value of the first ? in the insert statement.
+            preparedStatement.setString(1, task.name);
+
+            // Execute the statement
+            preparedStatement.execute();
+
         }
     }
 
@@ -87,6 +97,17 @@ public class TaskRepository {
         exception or not.
          */
         try (Connection connection = getDataSource().getConnection()) {
+            String updateTask = "update TASK set name = ? where id = ?";
+
+            // Get the prepped statement.
+            var preparedStatement = connection.prepareStatement(updateTask);
+
+            // Set the name.
+            preparedStatement.setString(1, task.name);
+            // Set the id - note the id must match an id from the database
+            preparedStatement.setInt(2, task.id);
+            // Execute the prepped statement.
+            preparedStatement.execute();
 
         }
     }
@@ -97,7 +118,7 @@ public class TaskRepository {
      * @param task a Task instance.
      * @throws SQLException
      */
-    public static void deleteAll(Task task) throws SQLException { // allows exception to bubble up to caller
+    public static void deleteAll() throws SQLException { // allows exception to bubble up to caller
         /* The try here closes the connection regardless of whether there is an
         exception or not.
          */
@@ -109,6 +130,17 @@ public class TaskRepository {
     // For testing purposes.
     public static void main(String[] args) {
 
+        // Try to create and add a task in the database.
+        try {
+            // Create a task
+            Task newTask = new Task("Learn JDBC");
+            create(newTask);
+            // Update a task.
+            Task updateTask = new Task(12, "Make your bed");
+            update(updateTask);
+        } catch (SQLException e) {
+
+        }
     }
 
 }
