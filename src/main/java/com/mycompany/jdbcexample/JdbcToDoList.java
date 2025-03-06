@@ -41,6 +41,8 @@ public class JdbcToDoList {
          */
         // Create a table with sql string
         var createTableSql = "CREATE TABLE IF NOT EXISTS TASK (id IDENTITY PRIMARY KEY, name VARCHAR)";
+        // insert string for task, ID is auto created since it is the primary key
+        String insertQuery = "insert into TASK (name) values ('Learn Java')";
 
         /*
         How do we create the table?
@@ -53,6 +55,9 @@ public class JdbcToDoList {
 
         // Execute our createTableSql using statement's execute method
         statement.execute(createTableSql);
+
+        // Execute query to insert task
+        statement.execute(insertQuery);
 
         // close statement and connection to remove issues with console not updating
         statement.close();
