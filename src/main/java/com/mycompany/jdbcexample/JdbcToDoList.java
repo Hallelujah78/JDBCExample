@@ -97,6 +97,21 @@ public class JdbcToDoList {
         /**
          * *************** END UPDATE *******************
          */
+        /**
+         * *************** DELETE *******************
+         */
+        String deleteQuery = "delete from TASK where name = 'Learn Jakarta EE!'";
+
+//        statement.execute(deleteQuery); // commented out to avoid too many deletes
+        /**
+         * *************** END DELETE *******************
+         */
+        /**
+         * *************** FIND *******************
+         */
+        /**
+         * *************** END FIND *******************
+         */
 // Close statement and connection to remove issues with console not updating
         statement.close();
         connection.close();
