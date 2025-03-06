@@ -19,6 +19,13 @@
             <!-- must change scope to compile or runtime, test won't work -->
             <scope>runtime</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>6.2.1</version>
+        </dependency>
+
     </dependencies>
 
 </project>

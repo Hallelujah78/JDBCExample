@@ -1,2 +1,4 @@
 com\mycompany\jdbcexample\JDBCExample.class
+com\mycompany\jdbcexample\Task.class
+com\mycompany\jdbcexample\TaskRepository.class
 com\mycompany\jdbcexample\JdbcToDoList.class
