@@ -107,12 +107,21 @@ public class JdbcToDoList {
          * *************** END DELETE *******************
          */
         /**
-         * *************** FIND *******************
+         * *************** FIND - SELECT *******************
          */
+        String selectAllQuery = "select * from TASK";
+        // We get the entire table.
+        var resultSet = statement.executeQuery(selectAllQuery);
+        // iterate over the result set
+        while (resultSet.next()) {
+            // getString("name") - get the "name" column
+            System.out.println("To Do Item: " + resultSet.getString("name"));
+        }
+
         /**
-         * *************** END FIND *******************
+         * *************** END FIND - SELECT *******************
          */
-// Close statement and connection to remove issues with console not updating
+        // Close statement and connection to remove issues with console not updating
         statement.close();
         connection.close();
         // print statement to show we ran the right file!
