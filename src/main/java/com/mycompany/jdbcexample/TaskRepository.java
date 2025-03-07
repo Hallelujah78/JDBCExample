@@ -24,7 +24,8 @@ import javax.sql.DataSource;
  */
 /**
  * This is a class that manages our database connections and has methods to
- * perform CRUD operations.
+ * perform CRUD operations. Largely mimics what Hibernate, JPA, Spring JDBC
+ * Templates do. Takes a proper OOP approach to performing CRUD on a database.
  *
  * @author gavan
  */
@@ -77,11 +78,29 @@ public class TaskRepository {
      * @return
      * @throws SQLException
      */
-    public static List<Task> findAll(Task task) throws SQLException { // allows exception to bubble up to caller
+    public static List<Task> findAll() throws SQLException { // allows exception to bubble up to caller
 
         List<Task> tasks = new ArrayList();
         try (Connection connection = getDataSource().getConnection()) {
+            /* Queries the database.
+            - Gets the resultSet
+            - Create task objects
+            - Put them in a list
+            - Return the list of tasks
+             */
+            String selectAllQuery = "select * from TASK";
 
+            // Get the statement.
+            var statement = connection.createStatement();
+
+            // We get the entire table.
+            var resultSet = statement.executeQuery(selectAllQuery);
+            // Iterate over the result set.
+            while (resultSet.next()) {
+                // getString("name") - get the "name" column
+                tasks.add(new Task(resultSet.getInt(1), resultSet.getString(2)));
+                // Note - can pass the string heading for the column or the number of the column.
+            }
         }
         return tasks;
     }
@@ -123,7 +142,8 @@ public class TaskRepository {
         exception or not.
          */
         try (Connection connection = getDataSource().getConnection()) {
-
+            var statement = connection.createStatement();
+            statement.executeUpdate("DELETE FROM TASK");
         }
     }
 
@@ -132,13 +152,22 @@ public class TaskRepository {
 
         // Try to create and add a task in the database.
         try {
+
+            // Delete all.
+            deleteAll();
             // Create a task
             Task newTask = new Task("Learn JDBC");
             create(newTask);
             // Update a task.
             Task updateTask = new Task(12, "Make your bed");
             update(updateTask);
+            // Find all tasks.
+            List<Task> taskList = findAll();
+            for (Task task : taskList) {
+                System.out.println("Task name: " + task.name);
+            }
         } catch (SQLException e) {
+            e.printStackTrace();
 
         }
     }
